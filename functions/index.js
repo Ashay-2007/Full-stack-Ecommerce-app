@@ -22,10 +22,30 @@ app.post("/payments/create", async (request, response) => {
   const total = request.query.total;
 
   console.log("Payment Request Recieved BOOM!!! for this amount >>> ", total);
-
+  const customer = await stripe.customers.create({
+    name: 'Jenny Rosen',
+    address: {
+      line1: '510 Townsend St',
+      postal_code: '98140',
+      city: 'San Francisco',
+      state: 'CA',
+      country: 'US',
+    }
+  });
   const paymentIntent = await stripe.paymentIntents.create({
     amount: total, // subunits of the currency
     currency: "usd",
+    description: 'test description',
+    shipping: {
+        name: 'Jenny Rosen',
+        address: {
+          line1: '510 Townsend St',
+          postal_code: '98140',
+          city: 'San Francisco',
+          state: 'CA',
+          country: 'US',
+        },
+    },
   });
 
   // OK - Created
